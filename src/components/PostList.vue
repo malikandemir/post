@@ -20,47 +20,50 @@
             </div>
         </div>
         <div class="col-md-6">
-            <h4>Tutorials List</h4>
+            <h4>Posts List</h4>
             <ul class="list-group">
                 <li
                     class="list-group-item"
                     :class="{ active: index == currentIndex }"
-                    v-for="(tutorial, index) in tutorials"
+                    v-for="(post, index) in posts"
                     :key="index"
-                    @click="setActiveTutorial(tutorial, index)"
+                    @click="setActivePost(post, index)"
                 >
-                    {{ tutorial.title }}
+                    {{ post.author }}
                 </li>
             </ul>
 
-            <button class="m-3 btn btn-sm btn-danger" @click="removeAllTutorials">
+            <button class="m-3 btn btn-sm btn-danger" @click="removeAllPosts">
                 Remove All
             </button>
         </div>
         <div class="col-md-6">
-            <div v-if="currentTutorial.id">
-                <h4>Tutorial</h4>
+            <div v-if="currentPost.postId">
+                <h4>Post</h4>
                 <div>
-                    <label><strong>Title:</strong></label> {{ currentTutorial.title }}
+                    <label><strong>Post Id:</strong></label> {{ currentPost.postId }}
+                </div>
+                <div>
+                    <label><strong>Author:</strong></label> {{ currentPost.author }}
                 </div>
                 <div>
                     <label><strong>Description:</strong></label>
-                    {{ currentTutorial.description }}
+                    {{ currentPost.content }}
                 </div>
                 <div>
-                    <label><strong>Status:</strong></label>
-                    {{ currentTutorial.published ? "Published" : "Pending" }}
+                    <label><strong>time:</strong></label>
+                    {{ currentPost.time }}
                 </div>
 
                 <router-link
-                    :to="'/tutorials/' + currentTutorial.id"
+                    :to="'/posts/' + currentPost.postId"
                     class="badge badge-warning"
                 >Edit</router-link
                 >
             </div>
             <div v-else>
                 <br />
-                <p>Please click on a Tutorial...</p>
+                <p>Please click on a Post...</p>
             </div>
         </div>
     </div>
@@ -68,25 +71,25 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import TutorialDataService from "./../services/PostDataService.ts";
-import Tutorial from "./../types/Post";
+import PostDataService from "./../services/PostDataService.ts";
+import Post from "./../types/Post";
 import ResponseData from "./../types/ResponseData";
 
 export default defineComponent({
     name: "PostList",
     data() {
         return {
-            tutorials: [] as Tutorial[],
-            currentTutorial: {} as Tutorial,
+            posts: [] as Post[],
+            currentPost: {} as Post,
             currentIndex: -1,
             title: "",
         };
     },
     methods: {
-        retrieveTutorials() {
-            TutorialDataService.getAll()
+        retrievePosts() {
+            PostDataService.getAll()
                 .then((response: ResponseData) => {
-                    this.tutorials = response.data;
+                    this.posts = response.data.data;
                     console.log(response.data);
                 })
                 .catch((e: Error) => {
@@ -95,18 +98,18 @@ export default defineComponent({
         },
 
         refreshList() {
-            this.retrieveTutorials();
-            this.currentTutorial = {} as Tutorial;
+            this.retrievePosts();
+            this.currentPost = {} as Post;
             this.currentIndex = -1;
         },
 
-        setActiveTutorial(tutorial: Tutorial, index = -1) {
-            this.currentTutorial = tutorial;
+        setActivePost(post: Post, index = -1) {
+            this.currentPost = post;
             this.currentIndex = index;
         },
 
-        removeAllTutorials() {
-            TutorialDataService.deleteAll()
+        removeAllPosts() {
+            PostDataService.deleteAll()
                 .then((response: ResponseData) => {
                     console.log(response.data);
                     this.refreshList();
@@ -117,10 +120,10 @@ export default defineComponent({
         },
 
         searchTitle() {
-            TutorialDataService.findByTitle(this.title)
+            PostDataService.findByTitle(this.title)
                 .then((response: ResponseData) => {
-                    this.tutorials = response.data;
-                    this.setActiveTutorial({} as Tutorial);
+                    this.posts = response.data;
+                    this.setActivePost({} as Post);
                     console.log(response.data);
                 })
                 .catch((e: Error) => {
@@ -129,7 +132,7 @@ export default defineComponent({
         },
     },
     mounted() {
-        this.retrieveTutorials();
+        this.retrievePosts();
     },
 });
 </script>

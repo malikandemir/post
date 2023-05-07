@@ -2,29 +2,42 @@
     <div class="submit-form">
         <div v-if="!submitted">
             <div class="form-group">
-                <label for="title">Title</label>
+                <label for="title">Post Id</label>
                 <input
                     type="text"
                     class="form-control"
-                    id="title"
+                    id="postId"
                     required
-                    v-model="tutorial.title"
+                    v-model="post.postId"
                     name="title"
                 />
             </div>
 
             <div class="form-group">
-                <label for="description">Description</label>
+                <label for="description">author</label>
                 <input
                     class="form-control"
-                    id="description"
+                    id="author"
                     required
-                    v-model="tutorial.description"
+                    v-model="post.author"
                     name="description"
                 />
             </div>
 
-            <button @click="saveTutorial" class="btn btn-success">Submit</button>
+
+
+            <div class="form-group">
+                <label for="description">content</label>
+                <input
+                    class="form-control"
+                    id="content"
+                    required
+                    v-model="post.content"
+                    name="description"
+                />
+            </div>
+
+            <button @click="savePost" class="btn btn-success">Submit</button>
         </div>
 
         <div v-else>
@@ -44,25 +57,24 @@ export default defineComponent({
     name: "AddPost",
     data() {
         return {
-            tutorial: {
-                id: null,
-                title: "",
-                description: "",
-                published: false,
+            post: {
+                postId: null,
+                author: "",
+                content: ""
             } as Post,
             submitted: false,
         };
     },
     methods: {
-        saveTutorial() {
+        savePost() {
             let data = {
-                title: this.tutorial.title,
-                description: this.tutorial.description,
+                postId: this.post.postId,
+                author: this.post.author,
+                content: this.post.content,
             };
 
             PostDataService.create(data)
                 .then((response: ResponseData) => {
-                    this.tutorial.id = response.data.id;
                     console.log(response.data);
                     this.submitted = true;
                 })
@@ -73,7 +85,7 @@ export default defineComponent({
 
         newPost() {
             this.submitted = false;
-            this.tutorial = {} as Post;
+            this.post = {} as Post;
         },
     },
 });

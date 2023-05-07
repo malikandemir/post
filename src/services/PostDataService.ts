@@ -2,7 +2,7 @@ import http from "./../http-common";
 
 class TutorialDataService {
     getAll(): Promise<any> {
-        return http.get("/post");
+        return http.get("/posts");
     }
 
     get(id: any): Promise<any> {
