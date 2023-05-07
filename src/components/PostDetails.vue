@@ -1,52 +1,50 @@
 <template>
-    <div v-if="currentTutorial.id" class="edit-form">
+    <div v-if="currentTutorial.postId" class="edit-form">
         <h4>Tutorial</h4>
         <form>
             <div class="form-group">
-                <label for="title">Title</label>
+                <label for="postId">Post Id</label>
                 <input
                     type="text"
                     class="form-control"
-                    id="title"
-                    v-model="currentTutorial.title"
+                    id="postId"
+                    v-model="currentPost.postId"
                 />
             </div>
             <div class="form-group">
-                <label for="description">Description</label>
+                <label for="author">Author</label>
                 <input
                     type="text"
                     class="form-control"
-                    id="description"
-                    v-model="currentTutorial.description"
+                    id="author"
+                    v-model="currentPost.author"
                 />
             </div>
-
             <div class="form-group">
-                <label><strong>Status:</strong></label>
-                {{ currentTutorial.published ? "Published" : "Pending" }}
+                <label for="content">Content</label>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="content"
+                    v-model="currentPost.content"
+                />
+            </div>
+            <div class="form-group">
+                <label for="time">Time</label>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="time"
+                    v-model="currentPost.time"
+                />
             </div>
         </form>
 
-        <button
-            class="badge badge-primary mr-2"
-            v-if="currentTutorial.published"
-            @click="updatePublished(false)"
-        >
-            UnPublish
-        </button>
-        <button
-            v-else
-            class="badge badge-primary mr-2"
-            @click="updatePublished(true)"
-        >
-            Publish
-        </button>
-
-        <button class="badge badge-danger mr-2" @click="deleteTutorial">
+        <button class="badge badge-danger mr-2" @click="deletePost">
             Delete
         </button>
 
-        <button type="submit" class="badge badge-success" @click="updateTutorial">
+        <button type="submit" class="badge badge-success" @click="updatePost">
             Update
         </button>
         <p>{{ message }}</p>
@@ -54,29 +52,29 @@
 
     <div v-else>
         <br />
-        <p>Please click on a Tutorial...</p>
+        <p>Please click on a Post...</p>
     </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import TutorialDataService from "./../services/PostDataService";
-import Tutorial from "./../types/Post";
+import PostDataService from "./../services/PostDataService";
+import Post from "./../types/Post";
 import ResponseData from "./../types/ResponseData";
 
 export default defineComponent({
     name: "Post",
     data() {
         return {
-            currentTutorial: {} as Tutorial,
+            currentPost: {} as Post,
             message: "",
         };
     },
     methods: {
-        getTutorial(id: any) {
-            TutorialDataService.get(id)
+        getPost(postId: any) {
+            PostDataService.get(postId)
                 .then((response: ResponseData) => {
-                    this.currentTutorial = response.data;
+                    this.currentPost = response.data.data;
                     console.log(response.data);
                 })
                 .catch((e: Error) => {
@@ -84,41 +82,22 @@ export default defineComponent({
                 });
         },
 
-        updatePublished(status: boolean) {
-            let data = {
-                id: this.currentTutorial.id,
-                title: this.currentTutorial.title,
-                description: this.currentTutorial.description,
-                published: status,
-            };
-
-            TutorialDataService.update(this.currentTutorial.id, data)
+        updatePost() {
+            PostDataService.update(this.currentPost.postId, this.currentPost)
                 .then((response: ResponseData) => {
                     console.log(response.data);
-                    this.currentTutorial.published = status;
-                    this.message = "The status was updated successfully!";
+                    this.message = "The post was updated successfully!";
                 })
                 .catch((e: Error) => {
                     console.log(e);
                 });
         },
 
-        updateTutorial() {
-            TutorialDataService.update(this.currentTutorial.id, this.currentTutorial)
+        deletePost() {
+            PostDataService.delete(this.currentPost.postId)
                 .then((response: ResponseData) => {
                     console.log(response.data);
-                    this.message = "The tutorial was updated successfully!";
-                })
-                .catch((e: Error) => {
-                    console.log(e);
-                });
-        },
-
-        deleteTutorial() {
-            TutorialDataService.delete(this.currentTutorial.id)
-                .then((response: ResponseData) => {
-                    console.log(response.data);
-                    this.$router.push({ name: "tutorials" });
+                    this.$router.push({ name: "posts" });
                 })
                 .catch((e: Error) => {
                     console.log(e);
@@ -127,7 +106,7 @@ export default defineComponent({
     },
     mounted() {
         this.message = "";
-        this.getTutorial(this.$route.params.id);
+        this.getPost(this.$route.params.postId);
     },
 });
 </script>
