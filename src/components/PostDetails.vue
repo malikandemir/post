@@ -1,6 +1,6 @@
 <template>
-    <div v-if="currentTutorial.postId" class="edit-form">
-        <h4>Tutorial</h4>
+    <div v-if="currentPost.postId" class="edit-form">
+        <h4>Post</h4>
         <form>
             <div class="form-group">
                 <label for="postId">Post Id</label>
