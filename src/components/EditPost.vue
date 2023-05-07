@@ -2,7 +2,7 @@
 
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
 export default {
     name: "EditPost"
 }
