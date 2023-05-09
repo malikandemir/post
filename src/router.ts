@@ -9,8 +9,8 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("./components/PostList.vue"),
     },
     {
-        path: "/tutorials/:id",
-        name: "tutorial-details",
+        path: "/posts/:id",
+        name: "post-details",
         component: () => import("./components/PostDetails.vue"),
     },
     {
