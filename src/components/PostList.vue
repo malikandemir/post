@@ -63,7 +63,7 @@
             </div>
             <div v-else>
                 <br />
-                <p>Please click on a Post...</p>
+                <p>click on a Post...     Hi</p>
             </div>
         </div>
     </div>
