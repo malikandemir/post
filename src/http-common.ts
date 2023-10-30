@@ -6,7 +6,7 @@ const apiClient: AxiosInstance =  axios.create({
         "Content-type": "application/json",
         "x-api-key": import.meta.env.VITE_POST_X_API_KEY,
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true, // Required for cookies, authorization headers with HTTPS,
+        'Access-Control-Allow-Credentials': false, // Required for cookies, authorization headers with HTTPS,
         'withCredentials': false,
     },
 });
