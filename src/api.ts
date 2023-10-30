@@ -4,7 +4,9 @@ const api = axios.create({
     baseURL: 'http://localhost:5000',
     headers: {
         'Content-Type': 'application/json',
-        'x-api-key': 'b8krXzbpdLbbA3SlWvldanNEslAMp6e2u3z3K1hh'
+        'x-api-key': 'b8krXzbpdLbbA3SlWvldanNEslAMp6e2u3z3K1hh',
+        'Access-Control-Allow-Origin': "*", // Required for CORS support to work
+        'Access-Control-Allow-Credentials': true, // Required for cookies, authorization headers with HTTPS,
     },
     transformRequest: [
         (data) => {
